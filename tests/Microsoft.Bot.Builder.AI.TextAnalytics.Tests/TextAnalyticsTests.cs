@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Adapters;
+using Microsoft.Bot.Configuration.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RichardSzalay.MockHttp;
 
@@ -17,17 +18,18 @@ namespace Microsoft.Bot.Builder.AI.TextAnalytics.Tests
         [TestCategory("TextAnalytics")]
         public async Task TextAnalyzer_DetectLanguage()
         {
-            var options = new TextAnalyticsOptions()
+            var service = new TextAnalyticsService()
             {
-                Key = _key,
+                SubscriptionKey = _key,
                 Endpoint = "https://westeurope.api.cognitive.microsoft.com",
             };
 
+
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When(HttpMethod.Post, options.Endpoint + "*")
+            mockHttp.When(HttpMethod.Post, service.Endpoint + "*")
                 .Respond("application/json", GetResponse("DetectLanguage_German.json"));
 
-            var textAnalyzer = new TextAnalyzer(options, mockHttp.ToHttpClient());
+            var textAnalyzer = new TextAnalyzer(service, mockHttp.ToHttpClient());
 
             var result = await textAnalyzer.DetectLanguageAsync("Das ist ein Text.");
             Assert.IsNotNull(result);
@@ -39,17 +41,17 @@ namespace Microsoft.Bot.Builder.AI.TextAnalytics.Tests
         [TestCategory("TextAnalytics")]
         public async Task TextAnalyzer_DetectLanguageContext()
         {
-            var options = new TextAnalyticsOptions()
+            var service = new TextAnalyticsService()
             {
-                Key = _key,
+                SubscriptionKey = _key,
                 Endpoint = "https://westeurope.api.cognitive.microsoft.com",
             };
 
             var mockHttp = new MockHttpMessageHandler();
-            mockHttp.When(HttpMethod.Post, options.Endpoint + "*")
+            mockHttp.When(HttpMethod.Post, service.Endpoint + "*")
                 .Respond("application/json", GetResponse("DetectLanguage_German.json"));
 
-            var textAnalyzer = new TextAnalyzer(options, mockHttp.ToHttpClient());
+            var textAnalyzer = new TextAnalyzer(service, mockHttp.ToHttpClient());
 
             var context = new TurnContext(new TestAdapter(), new Schema.Activity() { Type = "message", Text = "Ich bin ein Berliner." });
             var result = await textAnalyzer.DetectLanguageAsync(context);

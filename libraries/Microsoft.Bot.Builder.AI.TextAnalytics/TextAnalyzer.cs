@@ -6,20 +6,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
+using Microsoft.Bot.Configuration.Services;
 using Microsoft.Rest;
 
 namespace Microsoft.Bot.Builder.AI.TextAnalytics
 {
     public class TextAnalyzer
     {
-        private TextAnalyticsOptions _options;
         private TextAnalyticsClient _client;
 
-        public TextAnalyzer(TextAnalyticsOptions options, HttpClient httpClient = null)
+        public TextAnalyzer(TextAnalyticsService service, HttpClient httpClient = null)
         {
-            _options = options;
-            _client = new TextAnalyticsClient(new ApiKeyServiceClientCredentials(options.Key), httpClient, true);
-            _client.Endpoint = _options.Endpoint;
+            _client = new TextAnalyticsClient(new ApiKeyServiceClientCredentials(service.SubscriptionKey), httpClient, true);
+            _client.Endpoint = service.Endpoint;
         }
 
         public async Task<DetectedLanguage> DetectLanguageAsync(ITurnContext turnContext)
@@ -66,7 +65,7 @@ namespace Microsoft.Bot.Builder.AI.TextAnalytics
             }
             else
             {
-                return _options.DefaultLanguage; // default...
+                return null;
             }
         }
     }
