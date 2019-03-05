@@ -1,0 +1,15 @@
+﻿{
+  "documents": [
+    {
+      "id": "1",
+      "detectedLanguages": [
+        {
+          "name": "German",
+          "iso6391Name": "de",
+          "score": 1
+        }
+      ]
+    }
+   ],
+  "errors": null
+}
