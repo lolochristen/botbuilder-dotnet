@@ -9,6 +9,7 @@ namespace Microsoft.Bot.Configuration
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.Bot.Configuration.Encryption;
+    using Microsoft.Bot.Configuration.Services;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
@@ -545,6 +546,9 @@ namespace Microsoft.Bot.Configuration
                             break;
                         case ServiceTypes.QnA:
                             services.Add(token.ToObject<QnAMakerService>());
+                            break;
+                        case ServiceTypes.TextAnalytics:
+                            services.Add(token.ToObject<TextAnalyticsService>());
                             break;
                         case ServiceTypes.Generic:
                             services.Add(token.ToObject<GenericService>());
